@@ -7,7 +7,7 @@ function refreshData() {
        
         document.getElementById('location').textContent = `Location: ${data.location}`;
         document.getElementById('humidity').textContent = `Humidity: ${data.humidity}%`;
-        document.getElementById('temperature').textContent = `Temperature: ${data.temperature}°C`;
+        document.getElementById('temperature').textContent = `Temperature: ${data.temperature}°F`;
         document.getElementById('status').textContent = `Status: ${data.status}`;
         
       })

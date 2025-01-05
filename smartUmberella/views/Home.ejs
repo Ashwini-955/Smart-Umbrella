@@ -3,10 +3,14 @@
 <main>
     <section id="updates">   
       <h2>Live Updates</h2>
+      <% if(currUser){ %>
       <p id="location">Location: <%= weather.name %></p>
-      <p id="humidity">Humidity:<%= weather.main.humidity %></p>
-      <p id="temperature">Temperature: <%= weather.main.temp %></p>
+      <p id="humidity">Humidity:<%= weather.main.humidity %>%</p>
+      <p id="temperature">Temperature: <%= weather.main.temp %>°F</p>
       <p id="status">Status:<%= weather.weather[0].description %></p>
+      <% }else{ %>
+        <h1>Login First</h1>
+        <% } %>
     </section>
     <section id="controls">
       <h2>Controls</h2>

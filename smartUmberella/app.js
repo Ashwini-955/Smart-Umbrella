@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-const ejs = require("ejs");
 const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
@@ -14,7 +13,7 @@ const expressError = require("./utils/expressError.js");
 const wrapAsynv = require("./utils/wrapAsync.js");
 const userRouter = require("./routes/user.js");
 const homeRouter = require("./routes/HomePage.js");
-const sendMail = require("./utils/mail.js");
+const {sendMailOnTime} = require("./middleware.js");
 
 
 
@@ -80,28 +79,13 @@ app.listen(8080,()=>{
     
 })
 
-setInterval(async()=>{
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    console.log("Cheking the time");
-    if(hours === 3 && minutes === 5){
-        console.log("Sending mail");
-        try{
-
-            await sendMail();
-            console.log("Mail is sended");
-        }catch(error){
-            console.log(error);
-        }
-    }else{
-        console.log(`the current time is ${hours} : ${minutes} not 8 : 00`);
+app.use((req,res,next)=>{
+    if(req.isAuthenticated()){
+        setInterval(sendMailOnTime,60*500);
     }
-},60*500);
-
-
-
-
+    next();
+        
+})
 
 app.all("*",(req,res,next)=>{
     next(new expressError(404," page  not found"));

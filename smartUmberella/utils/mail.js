@@ -1,23 +1,5 @@
 const nodemailer = require("nodemailer");
-const city = 'Pimpri';
-const key = '92417092e62695ac743e5bcfcbec90c7';
-const url =  `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${key}`
-const axious = require("axios");
-
-const getWeatherData = async()=>{
-  let weather;
-  let error = null;
-  try{
-    const response = await axious.get(url);
-    weather = response.data;
-    error = null;
-  }catch(error){
-    console.log(error);
-    error = "some error occured";
-    weather = null;
-  }
-  return {weather,error};
-}
+const {getWeatherData } = require("./getWeather.js")
 
 
 const transporter = nodemailer.createTransport({
@@ -31,12 +13,13 @@ const transporter = nodemailer.createTransport({
 });
 
 
-const sendMail = async function main() {
+const sendMail = async function main(userEmail) {
   const { weather, error } = await getWeatherData();
+  
   if(weather){
       const mailOptions =   {
       from: '"Smart Umberella " <mishraraunak117@gmail.com>', 
-      to: "kumbharkartik150@gmail.com,ashwinirm05@gmail.com,smartumbrella123@gmail.com", 
+      to: "mishraraunak035@gmail.com", 
       subject: "Today'weather condition", 
       text: `Todays weather update : \n\nLocation : ${weather.name} \n Temprature : ${weather.main.temp}°F\nHumidity : ${weather.main.humidity}\ndescription : ${weather.weather[0].description}`, 
       html:         

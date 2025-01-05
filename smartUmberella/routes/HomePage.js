@@ -1,40 +1,39 @@
 const express = require("express");
 const router = express.Router();
-const boddyParser =  require("body-parser");
-const axious = require("axios");
-const city = 'Pimpri';
-const key = '92417092e62695ac743e5bcfcbec90c7';
-const url =  `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${key}`
-
+const {getWeatherData} = require("../utils/getWeather.js");
 
 router.get("/get-update",async(req,res)=>{
  try{
-    const response = await axious.get(url);
-    const weatherData = {
-        location : response.data.name,
-        humidity : response.data.main.humidity,
-        temperature : response.data.main.temp,
-        status : response.data.weather[0].description
-    };
-    res.json(weatherData);
+    const {weather,error} = await getWeatherData();
+    if(weather){
+        const weatherData = {
+            location : weather.name,
+            humidity : weather.main.humidity,
+            temperature : weather.main.temp,
+            status : weather.weather[0].description
+        };
+        res.json(weatherData);
+    }else{
+        throw new error;
+    }
+
   }catch(error){
       console.log(error);
       res.status(504).json({error : "Some error occured "});
   }
 });
 router.get("/",async(req,res)=>{
-    let weather;
-    let error = null;
-    try{
-        const response = await axious.get(url);
-        weather = response.data;
-        error = null;
-    }catch(error){
-        console.log(error);
-        error = "some error occured";
-        weather = null;
+    if(req.isAuthenticated()){
+        try{
+            const { weather, error } = await getWeatherData();
+            res.render("Home.ejs",{weather,error});
+        }catch(err){
+            res.redirect("/error.ejs");
+        }
+    }else{
+        
+        res.redirect("/login");
     }
-    res.render("Home.ejs",{weather,error});
 })
 
 module.exports = router;

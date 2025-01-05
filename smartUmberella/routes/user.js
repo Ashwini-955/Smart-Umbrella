@@ -37,7 +37,9 @@ router.get("/login",(req,res)=>{
 router.post("/login",passport.authenticate("local",{failureRedirect:'/login',failureFlash:true}),
     async(req,res)=>{
         req.flash("success","welcome to smartUmberella");
-        const redirectUrl = res.locals.redirectUrl || "/Home"
+        const redirectUrl = res.locals.redirectUrl || "/Home";
+        req.session.userEmail = req.user.email;
+        delete req.session.redirectUrl;
         res.redirect(redirectUrl);
 })
 
