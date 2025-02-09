@@ -31,7 +31,7 @@ body {
   }
   
   button {
-    background-color: #4caf50;
+    background-color: #6ad5f2;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -42,7 +42,7 @@ body {
   }
   
   button:hover {
-    background-color: #45a049;
+    background-color: #6ca3ec;
   }
   
   footer {
